@@ -31,7 +31,7 @@ public class FoodItemController {
 
     @GetMapping("/{restaurantId}")
     @ResponseStatus(HttpStatus.OK)
-    public List<FoodItemDto> getAllFoodItems(@PathVariable("restaurantId") String restaurantId) {
+    public List<FoodItemDto> getAllFoodItems(@PathVariable("restaurantId") Long restaurantId) {
         return foodItemService.getAllFoodItems(restaurantId);
     }
 
