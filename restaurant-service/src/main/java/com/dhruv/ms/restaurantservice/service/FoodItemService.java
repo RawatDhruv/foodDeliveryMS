@@ -1,11 +1,14 @@
 package com.dhruv.ms.restaurantservice.service;
 
 import com.dhruv.ms.restaurantservice.dto.FoodItemDto;
+import com.dhruv.ms.restaurantservice.dto.FoodItemResponse;
 import com.dhruv.ms.restaurantservice.model.FoodItem;
 import com.dhruv.ms.restaurantservice.model.Restaurant;
 import com.dhruv.ms.restaurantservice.repository.FoodItemRepository;
 import com.dhruv.ms.restaurantservice.repository.RestaurantRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -25,15 +28,17 @@ public class FoodItemService {
     private final String ROLE = "RESTAURANT_OWNER";
 
 
-    public String addFoodItem(FoodItemDto foodItemDto, String username) {
+    public ResponseEntity<String> addFoodItem(FoodItemDto foodItemDto, String username) {
         Optional<Restaurant> optionalRestaurant = restaurantRepository.findById(foodItemDto.restaurantId());
         if (optionalRestaurant.isEmpty()) {
-            return "Restaurant not found";
+            return new ResponseEntity<>("Restaurant not found", HttpStatus.NOT_FOUND);
         }
+
         Restaurant restaurant = optionalRestaurant.get();
-        if(!restaurant.getOwner().getUsername().equals(username)) {
-            return "Access Denied...You are not the OWNER of this restaurant";
+        if (!restaurant.getOwner().getUsername().equals(username)) {
+            return new ResponseEntity<>("Access Denied...You are not the OWNER of this restaurant", HttpStatus.FORBIDDEN);
         }
+
         Optional<FoodItem> optionalFoodItem = foodItemRepository.findByNameAndRestaurant(foodItemDto.name(), restaurant);
         if (optionalFoodItem.isEmpty()) {
             FoodItem foodItem = FoodItem.builder()
@@ -45,18 +50,18 @@ public class FoodItemService {
                     .build();
 
             foodItemRepository.save(foodItem);
-            return "Food item added with id: " + foodItem.getId();
+            return new ResponseEntity<>("Food item added with id: " + foodItem.getId(), HttpStatus.CREATED);
         }
+
         FoodItem foodItem = optionalFoodItem.get();
         update(foodItem, foodItemDto);
-        return "Food item added with id: " + foodItem.getId();
+        return new ResponseEntity<>("Food item updated with id: " + foodItem.getId(), HttpStatus.OK);
     }
 
-    public List<FoodItemDto> getAllFoodItems(Long restaurantId) {
-        List<FoodItem> allFoodItems = foodItemRepository.findByRestaurantId(restaurantId);
+    public List<FoodItemResponse> getAllFoodItems(Long restaurantId) {
+        List<FoodItem> allFoodItems = foodItemRepository.findByAllRestaurantId(restaurantId);
         return allFoodItems.stream().map(foodItem ->
-                FoodItemDto.builder()
-                        .id(foodItem.getId())
+                FoodItemResponse.builder()
                         .name(foodItem.getName())
                         .description(foodItem.getDescription())
                         .imageUrl(foodItem.getImageUrl())
@@ -67,32 +72,46 @@ public class FoodItemService {
         ).toList();
     }
 
-    public String updateFoodItem(FoodItemDto foodItemDto, String username) {
-        Restaurant restaurant = restaurantRepository.findById(foodItemDto.restaurantId()).get();
-        if(!restaurant.getOwner().getUsername().equals(username)) {
-            return "Access Denied...You are not the OWNER of this restaurant";
+    public ResponseEntity<String> updateFoodItem(FoodItemDto foodItemDto, String username) {
+        Optional<Restaurant> optionalRestaurant = restaurantRepository.findById(foodItemDto.restaurantId());
+        if (optionalRestaurant.isEmpty()) {
+            return new ResponseEntity<>("Restaurant not found", HttpStatus.NOT_FOUND);
         }
-        Optional<FoodItem> optionalFoodItem = foodItemRepository.findByIdAndDeletedFalse(foodItemDto.id());
+
+        Restaurant restaurant = optionalRestaurant.get();
+        if (!restaurant.getOwner().getUsername().equals(username)) {
+            return new ResponseEntity<>("Access Denied...You are not the OWNER of this restaurant", HttpStatus.FORBIDDEN);
+        }
+
+        Optional<FoodItem> optionalFoodItem = foodItemRepository.findByNameAndRestaurantId(foodItemDto.name(), foodItemDto.restaurantId());
         if (optionalFoodItem.isPresent()) {
-            update(optionalFoodItem.get(),foodItemDto);
-            return "Updated Successfully...";
+            update(optionalFoodItem.get(), foodItemDto);
+            return new ResponseEntity<>("Updated Successfully...", HttpStatus.OK);
         }
-        return "Food item not Present";
+
+        return new ResponseEntity<>("Food item not Present", HttpStatus.NOT_FOUND);
     }
 
-    public String removeFoodItem(FoodItemDto foodItemDto, String username) {
-        Restaurant restaurant = restaurantRepository.findById(foodItemDto.restaurantId()).get();
-        if(!restaurant.getOwner().getUsername().equals(username)) {
-            return "Access Denied...You are not the OWNER of this restaurant";
+    public ResponseEntity<String> removeFoodItem(FoodItemDto foodItemDto, String username) {
+        Optional<Restaurant> optionalRestaurant = restaurantRepository.findById(foodItemDto.restaurantId());
+        if (optionalRestaurant.isEmpty()) {
+            return new ResponseEntity<>("Restaurant not found", HttpStatus.NOT_FOUND);
         }
-        Optional<FoodItem> optionalFoodItem = foodItemRepository.findById(foodItemDto.id());
+
+        Restaurant restaurant = optionalRestaurant.get();
+        if (!restaurant.getOwner().getUsername().equals(username)) {
+            return new ResponseEntity<>("Access Denied...You are not the OWNER of this restaurant", HttpStatus.FORBIDDEN);
+        }
+
+        Optional<FoodItem> optionalFoodItem = foodItemRepository.findByNameAndRestaurantId(foodItemDto.name(), foodItemDto.restaurantId());
         if (optionalFoodItem.isPresent()) {
             FoodItem foodItem = optionalFoodItem.get();
             foodItem.setDeleted(true);
             foodItemRepository.save(foodItem);
-            return "Updated Successfully...";
+            return new ResponseEntity<>("Updated Successfully...", HttpStatus.OK);
         }
-        return "Food item not Present";
+
+        return new ResponseEntity<>("Food item not Present", HttpStatus.NOT_FOUND);
     }
 
     private void update(FoodItem item, FoodItemDto foodItemDto) {

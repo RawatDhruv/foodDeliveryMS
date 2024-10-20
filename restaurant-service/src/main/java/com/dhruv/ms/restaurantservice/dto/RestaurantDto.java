@@ -7,5 +7,5 @@ import com.dhruv.ms.restaurantservice.model.RestaurantContacts;
 import java.util.List;
 
 public record RestaurantDto(Long id, String name, String description, Address address, List<RestaurantContacts> contacts, Double rating,
-                            List<FoodItem> foodItems) {
+                            List<FoodItemResponse> foodItems) {
 }

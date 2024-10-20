@@ -11,7 +11,9 @@ import java.util.Optional;
 
 public interface FoodItemRepository extends JpaRepository<FoodItem, Long> {
     @Query("SELECT f FROM FoodItem f WHERE f.deleted = false AND f.restaurant.id = :restaurantId")
-    List<FoodItem> findByRestaurantId(@Param("restaurantId") Long restaurantId);
+    List<FoodItem> findByAllRestaurantId(@Param("restaurantId") Long restaurantId);
+    @Query("SELECT f FROM FoodItem f WHERE f.deleted = false AND f.restaurant.id = :restaurantId AND f.name=:foodName")
+    Optional<FoodItem>  findByNameAndRestaurantId(@Param("foodName") String foodName,@Param("restaurantId") Long restaurantId);
     @Query("SELECT f FROM FoodItem f WHERE f.deleted = false")
     List<Restaurant> findAllActive();
     Optional<FoodItem> findByIdAndDeletedFalse(Long id);

@@ -5,5 +5,5 @@ import com.dhruv.ms.restaurantservice.model.RestaurantContacts;
 
 import java.util.List;
 
-public record RestaurantRequest(String name, String description, Address address, List<RestaurantContacts> contacts, Double rating) {
+public record RestaurantRequest(String name, String description, AddressRequest address, List<RestaurantContactsRequest> contacts, Double rating) {
 }
