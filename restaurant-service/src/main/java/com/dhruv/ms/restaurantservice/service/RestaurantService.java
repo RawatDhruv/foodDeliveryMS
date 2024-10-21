@@ -49,7 +49,7 @@ public class RestaurantService {
                 .collect(Collectors.toList());
 
         Address restaurantAddress = Address.builder()
-                .address(request.address().street())
+                .street(request.address().street())
                 .city(request.address().city())
                 .state(request.address().state())
                 .zipcode(request.address().zipcode()).build();

@@ -22,7 +22,7 @@ public class Restaurant {
     @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private Address address;
     private Double rating;
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private OwnerInfo owner;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "restaurant_id")

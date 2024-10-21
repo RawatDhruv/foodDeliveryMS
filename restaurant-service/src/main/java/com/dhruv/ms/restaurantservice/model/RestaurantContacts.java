@@ -14,6 +14,8 @@ public class RestaurantContacts {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true, nullable = false)
     Long phoneNumber;
+    @Column(unique = true, nullable = false)
     String emailAddress;
 }
