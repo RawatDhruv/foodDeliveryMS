@@ -7,6 +7,7 @@ import com.dhruv.ms.restaurantservice.dto.RestaurantResponse;
 import com.dhruv.ms.restaurantservice.model.*;
 import com.dhruv.ms.restaurantservice.repository.FoodItemRepository;
 import com.dhruv.ms.restaurantservice.repository.RestaurantRepository;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -16,7 +17,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class RestaurantService {
 
     private final String ROLE = "RESTAURANT_OWNER";
@@ -28,17 +29,17 @@ public class RestaurantService {
     private WebClient.Builder webClientBuilder;
 
     public String addRestaurant(RestaurantRequest request, String username) {
-        String ownerRole = webClientBuilder.build().get()
-                .uri("http://auth-service/api/v1/user/role")
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
-        if(ownerRole == null) {
-            return "Error: Owner does not exist. Can't add this restaurant.";
-        }
-        else if(!ownerRole.equals(ROLE)) {
-            return "Error: Given owner is not a restaurant owner. Can't add this restaurant";
-        }
+//        String ownerRole = webClientBuilder.build().get()
+//                .uri("http://auth-service/api/v1/user/role")
+//                .retrieve()
+//                .bodyToMono(String.class)
+//                .block();
+//        if(ownerRole == null) {
+//            return "Error: Owner does not exist. Can't add this restaurant.";
+//        }
+//        else if(!ownerRole.equals(ROLE)) {
+//            return "Error: Given owner is not a restaurant owner. Can't add this restaurant";
+//        }
 
         List<RestaurantContacts> restaurantContacts = request.contacts().stream()
                 .map(contactRequest -> RestaurantContacts.builder()
@@ -91,7 +92,7 @@ public class RestaurantService {
     }
 
     private RestaurantDto getRestaurantDto(Restaurant restaurant) {
-        List<FoodItem> foodItems = foodItemRepository.findByAllRestaurantId(restaurant.getId());
+        List<FoodItem> foodItems = foodItemRepository.findAllByRestaurantIdAndDeleted(restaurant.getId(),false);
         return new RestaurantDto(restaurant.getId(),restaurant.getName(),restaurant.getDescription(),
                 restaurant.getAddress(),restaurant.getContactInfo(),restaurant.getRating(),mapFoodItemsToResponse(foodItems));
     }

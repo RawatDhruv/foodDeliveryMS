@@ -10,8 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface FoodItemRepository extends JpaRepository<FoodItem, Long> {
-    @Query("SELECT f FROM FoodItem f WHERE f.deleted = false AND f.restaurant.id = :restaurantId")
-    List<FoodItem> findByAllRestaurantId(@Param("restaurantId") Long restaurantId);
+    List<FoodItem> findAllByRestaurantIdAndDeleted(@Param("restaurantId") Long restaurantId,boolean deleted);
     @Query("SELECT f FROM FoodItem f WHERE f.deleted = false AND f.restaurant.id = :restaurantId AND f.name=:foodName")
     Optional<FoodItem>  findByNameAndRestaurantId(@Param("foodName") String foodName,@Param("restaurantId") Long restaurantId);
     @Query("SELECT f FROM FoodItem f WHERE f.deleted = false")

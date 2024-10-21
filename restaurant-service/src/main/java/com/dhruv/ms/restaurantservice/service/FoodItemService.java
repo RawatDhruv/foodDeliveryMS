@@ -59,7 +59,7 @@ public class FoodItemService {
     }
 
     public List<FoodItemResponse> getAllFoodItems(Long restaurantId) {
-        List<FoodItem> allFoodItems = foodItemRepository.findByAllRestaurantId(restaurantId);
+        List<FoodItem> allFoodItems = foodItemRepository.findAllByRestaurantIdAndDeleted(restaurantId,false);
         return allFoodItems.stream().map(foodItem ->
                 FoodItemResponse.builder()
                         .name(foodItem.getName())
