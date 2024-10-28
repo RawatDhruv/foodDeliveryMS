@@ -1,6 +1,6 @@
-package com.dhruv.ms.orderService.model;
+package com.dhruv.ms.restaurantservice.utils;
 
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @AllArgsConstructor
 @NoArgsConstructor
-@Embeddable
 public class Address {
-    private String address;
+    private String street;
     private String city;
     private String state;
     private Integer zipcode;
