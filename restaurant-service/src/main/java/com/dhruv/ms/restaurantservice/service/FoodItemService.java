@@ -62,6 +62,7 @@ public class FoodItemService {
         List<FoodItem> allFoodItems = foodItemRepository.findAllByRestaurantIdAndDeleted(restaurantId,false);
         return allFoodItems.stream().map(foodItem ->
                 FoodItemResponse.builder()
+                        .Id(foodItem.getId())
                         .name(foodItem.getName())
                         .description(foodItem.getDescription())
                         .imageUrl(foodItem.getImageUrl())
