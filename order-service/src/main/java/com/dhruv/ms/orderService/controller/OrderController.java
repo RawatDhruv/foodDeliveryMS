@@ -1,5 +1,6 @@
 package com.dhruv.ms.orderService.controller;
 
+import com.dhruv.ms.orderService.dto.OrderRequest;
 import com.dhruv.ms.orderService.dto.OrderResponse;
 import com.dhruv.ms.orderService.model.Order;
 import com.dhruv.ms.orderService.model.OrderStatus;
@@ -17,8 +18,8 @@ public class OrderController {
     private OrderService orderService;
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public OrderResponse placeOrder(@RequestBody Order order) {
-        return orderService.createOrder(order);
+    public OrderResponse placeOrder(@RequestBody OrderRequest orderRequest) {
+        return orderService.createOrder(orderRequest);
     }
 
     @PutMapping("/status")

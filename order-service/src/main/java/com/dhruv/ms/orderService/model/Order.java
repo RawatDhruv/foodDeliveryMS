@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -17,9 +18,8 @@ import java.util.List;
 @Table(name="Orders")
 public class Order {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
-    private Long orderNumber;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String orderNumber;
     private String restaurantId;
     @OneToMany
     private List<OrderItem> orderItems;

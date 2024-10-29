@@ -2,6 +2,7 @@ package com.dhruv.ms.orderService.service;
 
 import com.dhruv.ms.orderService.config.WebClientConfig;
 import com.dhruv.ms.orderService.dto.OrderItemDto;
+import com.dhruv.ms.orderService.dto.OrderRequest;
 import com.dhruv.ms.orderService.dto.OrderResponse;
 import com.dhruv.ms.orderService.event.OrderPlacedNotification;
 import com.dhruv.ms.orderService.model.Order;
@@ -31,17 +32,19 @@ public class OrderService {
     private WebClient.Builder webClientBuilder;;
     private final KafkaTemplate<String, OrderPlacedNotification> kafkaTemplate;
 
-    public OrderResponse createOrder(Order order) {
-        order.setOrderTime(System.currentTimeMillis());
-        order.setTotalAmount(order.getOrderItems()
+    public OrderResponse createOrder(OrderRequest orderRequest) {
+
+        Order order = Order.builder()
+                .restaurantId(orderRequest.restaurantId())
+                .address(orderRequest.address())
+                .orderTime(System.currentTimeMillis())
+                .userId(orderRequest.userId())
+                .totalAmount(orderRequest.orderItems()
                 .stream()
                 .map(e -> e.getPrice().multiply(BigDecimal.valueOf(e.getQuantity())))
-                .reduce(BigDecimal.ZERO, BigDecimal::add));
-        order.setOrderStatus(OrderStatus.PENDING);
+                .reduce(BigDecimal.ZERO, BigDecimal::add))
+                .orderStatus(OrderStatus.PENDING).build();
         orderRespository.save(order);
-
-        List<String> foodItemIds = order.getOrderItems().stream().map(OrderItem::getFoodItemId).toList();
-        List<Integer> orderQuantities = order.getOrderItems().stream().map(OrderItem::getQuantity).toList();
 
         return OrderResponse.builder()
                 .orderItems(order.getOrderItems().stream().map(orderItem -> OrderItemDto.builder()
@@ -54,7 +57,6 @@ public class OrderService {
                 .orderStatus(order.getOrderStatus())
                 .address(order.getAddress())
                 .build();
-
     }
 
     public void updateOrderAfterPayment(List<String> paymentInfo){
@@ -77,7 +79,7 @@ public class OrderService {
 
     private void sendNotificationToRestaurant(Order order) {
         OrderPlacedNotification orderPlacedNotification = OrderPlacedNotification.builder()
-                .orderId(order.getId())
+                .orderId(order.getOrderNumber())
                 .userId(order.getUserId())
                 .orderAddress(order.getAddress())
                 .foodItemIds(order.getOrderItems().stream()
