@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 @Builder
 @Data
 public class OrderItemDto {
+    private Long foodItemId;
     private String name;
     private BigDecimal price;
     private Integer quantity;

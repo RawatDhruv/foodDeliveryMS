@@ -8,5 +8,5 @@ import jakarta.persistence.OneToMany;
 import java.math.BigDecimal;
 import java.util.List;
 
-public record OrderRequest(String restaurantId,List<OrderItemDto>orderItems,Address address, String userId) {
+public record OrderRequest(Long restaurantId,List<OrderItemDto>orderItems,Address address, Long userId) {
 }

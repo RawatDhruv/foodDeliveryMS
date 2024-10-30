@@ -15,9 +15,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderResponse {
-    private Long orderNumber;
-    private String restaurantName;
-    private String userName;
+    private String orderNumber;
+//    private String restaurantName;
+//    private String userName;
+    private Long restaurantId;
     private List<OrderItemDto> orderItems;
     private BigDecimal totalAmount;
     private Long orderTime;

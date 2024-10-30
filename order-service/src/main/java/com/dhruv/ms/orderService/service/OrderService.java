@@ -44,11 +44,27 @@ public class OrderService {
                 .map(e -> e.getPrice().multiply(BigDecimal.valueOf(e.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add))
                 .orderStatus(OrderStatus.PENDING).build();
+
+        List<OrderItem> orderItems = orderRequest.orderItems().stream()
+                .map(orderItemDto -> {
+                    OrderItem orderItem = OrderItem.builder()
+                            .name(orderItemDto.getName())
+                            .price(orderItemDto.getPrice())
+                            .quantity(orderItemDto.getQuantity())
+                            .foodItemId(orderItemDto.getFoodItemId())
+                            .order(order)
+                            .build();
+                    return orderItem;
+                }).toList();
+        order.setOrderItems(orderItems);
         orderRespository.save(order);
 
         return OrderResponse.builder()
+                .orderNumber(order.getOrderNumber())
+                .restaurantId(order.getRestaurantId())
                 .orderItems(order.getOrderItems().stream().map(orderItem -> OrderItemDto.builder()
                         .name(orderItem.getName())
+                        .foodItemId(orderItem.getFoodItemId())
                         .price(orderItem.getPrice())
                         .quantity(orderItem.getQuantity())
                         .build()).toList())

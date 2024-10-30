@@ -14,17 +14,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderPlacedNotification {
     private String orderId;
-    private List<String> foodItemIds;
+    private List<Long> foodItemIds;
     private List<Integer> foodItemQuantities;
     private Address orderAddress;
-    private String userId;
+    private Long userId;
 
     @JsonCreator
     public OrderPlacedNotification(@JsonProperty("orderId") String orderId,
-                                   @JsonProperty("foodItemIds") List<String> foodItemIds,
+                                   @JsonProperty("foodItemIds") List<Long> foodItemIds,
                                    @JsonProperty("foodItemQuantities") List<Integer> foodItemQuantities,
                                    @JsonProperty("orderAddress") Address orderAddress,
-                                   @JsonProperty("userId") String userId) {
+                                   @JsonProperty("userId") Long userId) {
         this.orderId = orderId;
         this.foodItemIds = foodItemIds;
         this.foodItemQuantities = foodItemQuantities;

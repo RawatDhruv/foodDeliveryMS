@@ -20,8 +20,8 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String orderNumber;
-    private String restaurantId;
-    @OneToMany
+    private Long restaurantId;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems;
     private BigDecimal totalAmount;
     private Long orderTime;
@@ -29,5 +29,5 @@ public class Order {
     private Long deliveryTime;
     private OrderStatus orderStatus;
     private String paymentId;
-    private String userId;
+    private Long userId;
 }
