@@ -1,0 +1,3 @@
+INSERT INTO `order_service`.`orders` (`order_status`, `total_amount`, `zipcode`, `order_time`, `restaurant_id`, `user_id`, `city`, `order_number`, `state`, `street`) VALUES ('0', '2700.00', '560321', '1730482404468', '1', '1', 'patrick', '41e5d54d-bbf2-49d3-985a-754f5908a320', 'new york', 'wilson');
+INSERT INTO `order_service`.`order_items` (`price`, `quantity`, `food_item_id`, `id`, `name`, `order_id`) VALUES ('500.00', '3', '1', '1', 'Veg ExtraVaganza', '41e5d54d-bbf2-49d3-985a-754f5908a320');
+INSERT INTO `order_service`.`order_items` (`price`, `quantity`, `food_item_id`, `id`, `name`, `order_id`) VALUES ('600.00', '2', '2', '2', 'Chicken Dominator', '41e5d54d-bbf2-49d3-985a-754f5908a320');
