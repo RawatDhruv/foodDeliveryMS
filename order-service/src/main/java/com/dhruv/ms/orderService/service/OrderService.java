@@ -76,7 +76,7 @@ public class OrderService {
     }
 
     public void updateOrderAfterPayment(List<String> paymentInfo){
-        Optional<Order> optionalOrder = orderRespository.findById(Long.valueOf(paymentInfo.get(1)));
+        Optional<Order> optionalOrder = orderRespository.findById(paymentInfo.get(1));
         if(optionalOrder.isPresent()){
             Order order = optionalOrder.get();
             if(paymentInfo.get(2).equals("SUCCESS")){
@@ -107,10 +107,11 @@ public class OrderService {
     }
 
     public void updateOrderStatus(String orderId, OrderStatus orderStatus) {
-        Optional<Order> optionalOrder = orderRespository.findById(Long.valueOf(orderId));
+        Optional<Order> optionalOrder = orderRespository.findById(orderId);
         if(optionalOrder.isPresent()) {
             Order order = optionalOrder.get();
             order.setOrderStatus(orderStatus);
+            orderRespository.save(order);
         }
     }
 }
