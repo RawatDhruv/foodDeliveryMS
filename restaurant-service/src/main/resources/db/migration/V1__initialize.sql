@@ -5,7 +5,7 @@ CREATE TABLE `addresses` (
                              `city` varchar(255) DEFAULT NULL,
                              `state` varchar(255) DEFAULT NULL,
                              PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `owner_infos` (
                                `id` bigint NOT NULL AUTO_INCREMENT,
@@ -14,7 +14,7 @@ CREATE TABLE `owner_infos` (
                                `phone_number` varchar(255) DEFAULT NULL,
                                PRIMARY KEY (`id`),
                                UNIQUE KEY `UK8d2o939nnx5333mfwoisgv2lu` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `restaurants` (
                                `id` bigint NOT NULL AUTO_INCREMENT,
@@ -28,7 +28,7 @@ CREATE TABLE `restaurants` (
                                KEY `FK7rlt8h2259ck6u14ei8ek18gi` (`owner_id`),
                                CONSTRAINT `FK7rlt8h2259ck6u14ei8ek18gi` FOREIGN KEY (`owner_id`) REFERENCES `owner_infos` (`id`),
                                CONSTRAINT `FKf77xr396uxbl0crr0pq0qj2q7` FOREIGN KEY (`address_id`) REFERENCES `addresses` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `contacts` (
                             `id` bigint NOT NULL AUTO_INCREMENT,
@@ -40,7 +40,7 @@ CREATE TABLE `contacts` (
                             UNIQUE KEY `UKiold2yl8wm1t4u4tgy8lysuc3` (`email_address`),
                             KEY `FKnde9mdcjsx5apyb1ba2971svs` (`restaurant_id`),
                             CONSTRAINT `FKnde9mdcjsx5apyb1ba2971svs` FOREIGN KEY (`restaurant_id`) REFERENCES `restaurants` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `food_items` (
                               `id` bigint NOT NULL AUTO_INCREMENT,
@@ -54,4 +54,4 @@ CREATE TABLE `food_items` (
                               UNIQUE KEY `UKrumkybity72myc6xwj7b56ie2` (`name`,`restaurant_id`),
                               KEY `FK1f3re9f14rtkoyghyuhx3cv9l` (`restaurant_id`),
                               CONSTRAINT `FK1f3re9f14rtkoyghyuhx3cv9l` FOREIGN KEY (`restaurant_id`) REFERENCES `restaurants` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
