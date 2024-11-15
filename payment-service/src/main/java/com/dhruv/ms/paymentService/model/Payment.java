@@ -14,7 +14,7 @@ import lombok.*;
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Long id;
     private Long timestamp;
     private Double amount;
     @ManyToOne(cascade = CascadeType.ALL)
