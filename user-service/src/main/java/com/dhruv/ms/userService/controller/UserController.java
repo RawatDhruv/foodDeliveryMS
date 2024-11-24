@@ -1,6 +1,7 @@
 package com.dhruv.ms.userService.controller;
 
 import com.dhruv.ms.userService.dto.UserDto;
+import com.dhruv.ms.userService.dto.UserPasswordRequest;
 import com.dhruv.ms.userService.dto.UserResponse;
 import com.dhruv.ms.userService.model.User;
 import com.dhruv.ms.userService.service.UserService;
@@ -21,9 +22,16 @@ public class UserController {
         return userService.createUser(userDto);
     }
 
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public String setUserPassword(@RequestBody UserPasswordRequest userPasswordRequest) {
+        return userService.setUserPassword(userPasswordRequest);
+    }
+
+
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public UserResponse getUser(@PathVariable("id") String id) {
+    public UserResponse getUser(@PathVariable("id") Long id) {
         return userService.getUser(id);
     }
 
