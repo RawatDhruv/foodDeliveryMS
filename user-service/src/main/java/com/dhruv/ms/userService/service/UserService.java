@@ -8,6 +8,7 @@ import com.dhruv.ms.userService.model.User;
 import com.dhruv.ms.userService.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
     private UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
 
     public String createUser(UserDto userDto) {
         List<Address> addresses = new ArrayList<>();
@@ -89,8 +91,7 @@ public class UserService {
     }
 
     private String hashPassword(String password) {
-        //to add some hashing mechanism.
-        return password;
+        return passwordEncoder.encode(password);
     }
 
     @Transactional
